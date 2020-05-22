@@ -1,5 +1,10 @@
 <template>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="box" label-width="80px">
+        <qrcode-drop-zone @detect="onDetect" @dragover="onDragOver" @init="logErrors">
+            <div class="drop-area" :class="{ 'dragover': dragover }">
+                将宁盾二维码图片拖动至此
+            </div>
+        </qrcode-drop-zone>
         <el-form-item label="宁盾URL" prop="ndKey" required>
             <el-input v-model="ruleForm.ndKey"></el-input>
         </el-form-item>
@@ -25,7 +30,7 @@
             <el-input v-model="tokenDetail.version" disabled></el-input>
         </el-form-item>
         <el-form-item label="宁盾密钥" v-if="ruleForm.isTokenDetailVisible">
-            <el-input v-model="tokenDetail.seed" show-password ></el-input>
+            <el-input v-model="tokenDetail.seed" show-password></el-input>
         </el-form-item>
         <el-form-item>
             <el-col :span="8">
@@ -59,6 +64,8 @@
             };
 
             return {
+                error: null,
+                dragover: false,
                 ruleForm: {
                     ndKey: '',
                     code: '',
@@ -85,6 +92,28 @@
             }
         },
         methods: {
+            async onDetect(promise) {
+                try {
+                    const {content} = await promise
+
+                    this.ruleForm.ndKey = content
+                    this.error = null
+                } catch (error) {
+                    if (error.name === 'DropImageFetchError') {
+                        this.error = 'Sorry, you can\'t load cross-origin images :/'
+                    } else if (error.name === 'DropImageDecodeError') {
+                        this.error = 'Ok, that\'s not an image. That can\'t be decoded.'
+                    } else {
+                        this.error = 'Ups, what kind of error is this?! ' + error.message
+                    }
+                }
+            },
+            logErrors(promise) {
+                promise.catch(console.error)
+            },
+            onDragOver(isDraggingOver) {
+                this.dragover = isDraggingOver
+            },
             dateFormat(date) {
                 const month = (date.getMonth() + 1).toString().padStart(2, '0');
                 const strDate = date.getDate().toString().padStart(2, '0');
@@ -109,7 +138,6 @@
                 }
                 return result
             },
-
             fillData() {
                 this.tokenDetail.tokenNo = this.json.token.serial
                 this.tokenDetail.companyName = this.json.companyName
@@ -148,5 +176,24 @@
 <style scoped>
     .box {
         width: 480px;
+    }
+
+    .drop-area {
+        height: 300px;
+        color: #fff;
+        text-align: center;
+        font-weight: bold;
+        padding: 10px;
+
+        background-color: rgba(0, 0, 0, .5);
+    }
+
+    .dragover {
+        background-color: rgba(0, 0, 0, .8);
+    }
+
+    .drop-error {
+        color: red;
+        font-weight: bold;
     }
 </style>
