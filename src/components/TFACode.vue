@@ -5,8 +5,8 @@
                 将宁盾二维码图片拖动至此
             </div>
         </qrcode-drop-zone>
-        <el-form-item label="宁盾URL" prop="ndKey" required>
-            <el-input v-model="ruleForm.ndKey"></el-input>
+        <el-form-item label="宁盾URL" prop="ndUrl" required>
+            <el-input v-model="ruleForm.ndUrl"></el-input>
         </el-form-item>
         <el-form-item label="令牌序号" v-if="ruleForm.isTokenDetailVisible">
             <el-input v-model="tokenDetail.tokenNo" disabled></el-input>
@@ -56,6 +56,7 @@
         data() {
             let validateInputStr = (rule, value, callback) => {
                 if (this.verifySeed(value)) {
+                    localStorage.ndKey = this.json.token.seed
                     callback();
                 } else {
                     callback(Error('密钥有误，请重新输入'))
@@ -67,12 +68,12 @@
                 error: null,
                 dragover: false,
                 ruleForm: {
-                    ndKey: '',
+                    ndUrl: '',
                     code: '',
                     isTokenDetailVisible: false,
                 },
                 rules: {
-                    ndKey: [
+                    ndUrl: [
                         {required: true, message: '请输入宁盾二维码内容/宁盾BASE64/宁盾密钥', trigger: 'blur'},
                         {validator: validateInputStr, trigger: 'blur'}
                     ]
@@ -96,7 +97,8 @@
                 try {
                     const {content} = await promise
 
-                    this.ruleForm.ndKey = content
+                    this.ruleForm.ndUrl = content
+                    localStorage.ndUrl = content
                     this.error = null
                 } catch (error) {
                     if (error.name === 'DropImageFetchError') {

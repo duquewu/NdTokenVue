@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <TFA msg="xxxx"/>
+    <DIS/>
   </div>
 </template>
 
 <script>
-import TFA from './components/TFACode.vue'
+import DIS from "./components/Dispacher";
 
 export default {
   name: 'App',
   components: {
-    TFA
+    DIS
   }
 }
 </script>
