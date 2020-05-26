@@ -1,17 +1,12 @@
 <template>
   <div id="app">
-    <DIS/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import DIS from "./components/Dispacher";
-
 export default {
   name: 'App',
-  components: {
-    DIS
-  }
 }
 </script>
 

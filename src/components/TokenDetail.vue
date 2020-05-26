@@ -2,7 +2,7 @@
     <div>
         <p>Code :{{code}}</p>
         <p> TODO: 详情待完善</p>
-        <el-progress percentage='0.2' />
+        <el-progress :percentage='0'/>
         <el-button type="primary" @click="refreshCode">刷新2FA</el-button>
         <el-button type="danger" @click="resetCode">重置</el-button>
     </div>
@@ -15,7 +15,15 @@
     name: "TokenDetail",
     data() {
       return {
-        code: getCode1(localStorage.ndKey),
+        code: ''
+      }
+    },
+    created() {
+      if (localStorage.ndKey === undefined) {
+        this.resetCode()
+        this.go2Login()
+      } else {
+        this.code = getCode1(localStorage.ndKey)
       }
     },
     methods: {
@@ -24,9 +32,11 @@
         this.code = getCode1(localStorage.ndKey)
       },
       resetCode() {
-        localStorage.ndKey = null
-        localStorage.ndUrl = null
-
+        localStorage.removeItem('ndKey')
+        localStorage.removeItem('ndUrl')
+      },
+      go2Login() {
+        this.$router.replace('/login')
       }
     }
   }
