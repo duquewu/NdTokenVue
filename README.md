@@ -1,3 +1,5 @@
+![github pages](https://github.com/geek5nan/NdTokenVue/workflows/github%20pages/badge.svg)
+
 # vue2fa
 
 ## Project setup
