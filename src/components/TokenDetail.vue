@@ -34,6 +34,7 @@
       resetCode() {
         localStorage.removeItem('ndKey')
         localStorage.removeItem('ndUrl')
+        this.go2Login()
       },
       go2Login() {
         this.$router.replace('/login')

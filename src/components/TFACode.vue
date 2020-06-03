@@ -1,7 +1,7 @@
 <template>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="box" label-width="80px">
         <qrcode-drop-zone @detect="onDetect" @dragover="onDragOver" @init="logErrors">
-            <div class="drop-area" :class="{ 'dragover': dragover }">
+            <div class="drop-area" :class="{ 'dragover1': dragover }">
                 将宁盾二维码图片拖动至此
             </div>
         </qrcode-drop-zone>
@@ -74,7 +74,7 @@
         },
         rules: {
           ndUrl: [
-            {required: true, message: '请输入宁盾二维码内容/宁盾BASE64/宁盾密钥', trigger: 'blur'},
+            {required: true, message: '请输入宁盾 URL', trigger: 'blur'},
             {validator: validateInputStr, trigger: 'blur'}
           ]
         },
@@ -190,7 +190,7 @@
         background-color: rgba(0, 0, 0, .5);
     }
 
-    .dragover {
+    .dragover1 {
         background-color: rgba(0, 0, 0, .8);
     }
 
